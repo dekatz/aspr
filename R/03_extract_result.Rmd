@@ -1,0 +1,303 @@
+---
+title: "Extract result for report"
+author: "Dessy"
+date: '2022-05-05'
+output: html_document
+---
+
+# Set working directory 
+
+```{r setup, cache=FALSE, include=FALSE}
+library(knitr)
+wd_path <- Sys.getenv("PWD") # or set a work directory of your choice
+knitr::opts_knit$set(upload.fun = imgur_upload, self.contained = FALSE,
+              root.dir = wd_path) 
+```
+
+
+
+```{r}
+# load library
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(here, readr, ade4, adegraphics, scales, tidyverse)
+
+# set reference path 
+if(!file.exists(paste0(wd_path, ".here"))) here::set_here(path = wd_path)
+
+# load functions
+source(here::here("R/utils.R"))
+
+# file name reference
+longvarname <- readr::read_csv(here::here("var/varname_reference_edit.csv"), 
+                               col_types = cols(.default = "c"))
+
+# load fit result
+load(here::here('analysis/mbpls_fit_filtered.Rdata'))
+```
+# 1. Summary fit results
+## 1) Züchter
+
+```{r}
+summary(mbpls_zht_fit)
+```
+
+## 2) Mäster
+
+```{r}
+summary(mbpls_mst_fit)
+```
+
+# 2. Bootstrap
+
+```{r}
+# Mäster
+bootstrap_mst <- ade4::randboot(mbpls_mst_fit , optdim = 3, nrepet = 40)
+
+# Züchter
+bootstrap_zht <- ade4::randboot(mbpls_zht_fit, optdim = 3, nrepet = 40)
+```
+
+# 3. Extracting coefficients
+
+```{r}
+# Mäster
+coef_mst <- bind_cols( 
+  GetMBCoef(bootstrap_mst, yname = "lagedesbetriebes"),
+  GetMBCoef(bootstrap_mst, yname = "abschmrngdsstswg"),
+  GetMBCoef(bootstrap_mst, yname = "arbtsblfmngmtdsb")
+  )
+
+# Züchter
+coef_zht <- bind_cols( 
+  GetMBCoef(bootstrap_zht, yname = "lagedesbetriebes"),
+  GetMBCoef(bootstrap_zht, yname = "abschmrngdsstswg"),
+  GetMBCoef(bootstrap_zht, yname = "arbtsblfmngmtdsb")
+)
+```
+
+
+# 4. Block importance 
+## 1) Züchter
+
+```{r}
+# block importance with error bars plot
+if(adegraphicsLoaded())  plot(bootstrap_zht$bipc) 
+```
+
+```{r}
+# save block importance as dataframe
+bloimp_zht <- GetBlockImp(bootstrap_zht)
+
+# prepare pie chart
+pie_zht  <- bloimp_zht  %>% 
+  arrange(desc(varname)) %>%
+  mutate(prop = bloimp *100) %>%
+  mutate(ypos = cumsum(prop)- 0.5*prop ) %>%
+  rename(Block = varname)
+
+# Draw pie chart
+pie_zht <- ggplot(pie_zht, aes(x="", y=prop, fill=Block)) +
+  geom_bar(stat="identity", width=1, color="white") +
+  coord_polar("y", start=0) +
+  theme_void() + 
+  #theme(legend.position="bottom") +
+  geom_text(aes(y = ypos, label = percent(prop/100)), color = "black", size=5) +
+  scale_fill_brewer(palette="RdPu") # RdPu
+pie_zht
+```
+
+```{r}
+# save block importance as csv
+readr::write_csv(bloimp_zht, file = here::here("analysis/bloimp_zht.csv"))
+```
+
+
+```{r dev = "png", fig.show='hide'}
+# save pie chart
+png(here("figures/Diagramm03_pie_zht.png"), width = 7, height = 4, units = 'in', res = 300)
+pie_zht
+dev.off()
+```
+## 2) Mäster
+
+```{r}
+# block importance with error bars plot
+if(adegraphicsLoaded())  plot(bootstrap_mst$bipc) 
+```
+
+```{r}
+# save block importance as dataframe
+bloimp_mst <- GetBlockImp(bootstrap_mst)
+
+# prepare pie chart
+pie_mst  <- bloimp_mst  %>% 
+  arrange(desc(varname)) %>%
+  mutate(prop = bloimp *100) %>%
+  mutate(ypos = cumsum(prop)- 0.5*prop ) %>%
+  rename(Block = varname)
+
+# Draw pie chart
+pie_mst <- ggplot(pie_mst, aes(x="", y=prop, fill=Block)) +
+  geom_bar(stat="identity", width=1, color="white") +
+  coord_polar("y", start=0) +
+  theme_void() + 
+  #theme(legend.position="bottom") +
+  geom_text(aes(y = ypos, label = percent(prop/100)), color = "black", size=5) +
+  scale_fill_brewer(palette="RdPu") # RdPu
+pie_mst
+```
+
+```{r}
+# save block importance as csv
+readr::write_csv(bloimp_mst, file = here::here("analysis/bloimp_mst.csv"))
+```
+
+
+```{r dev = "png", fig.show='hide'}
+# save pie chart
+png(here("figures/Diagramm02_pie_mst.png"), width = 7, height = 4, units = 'in', res = 300)
+pie_mst
+dev.off()
+```
+
+# 5. Variable importance for each Y1, Y2, Y3
+## 1) Züchter
+
+```{r dpi = 200}
+# coefficient for each Y1, Y2, Y3
+g1 <- plot(bootstrap_zht$XYcoef$lagedesbetriebes, main = "lagedesbetriebes", plot = FALSE)
+g2 <- plot(bootstrap_zht$XYcoef$abschmrngdsstswg, main = "abschmrngdsstswg", plot = FALSE)
+g3 <- plot(bootstrap_zht$XYcoef$arbtsblfmngmtdsb, main = "arbtsblfmngmtdsb", plot = FALSE)
+adegraphics::ADEgS(list(g1, g2, g3))
+```
+
+
+## 2) Mäster
+
+```{r dpi = 200}
+g1 <- plot(bootstrap_mst$XYcoef$lagedesbetriebes, main = "lagedesbetriebes", plot = FALSE)
+g2 <- plot(bootstrap_mst$XYcoef$abschmrngdsstswg, main = "abschmrngdsstswg", plot = FALSE)
+g3 <- plot(bootstrap_mst$XYcoef$arbtsblfmngmtdsb, main = "arbtsblfmngmtdsb", plot = FALSE)
+
+adegraphics::ADEgS(list(g1, g2, g3))
+```
+
+# 6. Overall variable importance
+## 1) Züchter
+
+```{r}
+# using base plot
+#adegraphics::ADEgS(list(plot(bootstrap_zht$vipc, main = "vipc", plot = FALSE)))
+```
+
+
+```{r}
+# overall coefficient
+varimp_zht <- GetVarImp(bootstrap_zht)
+
+# join with coefficients
+varimp_zht <- cbind(coef_zht, varimp_zht)
+
+# replace name with long name
+varimp_zht <- varimp_zht %>%
+  dplyr::left_join(longvarname, by = c("varname" = "new"))
+
+# variable name as ordered factor (for diagram layout)
+varimp_zht$ori <- factor(varimp_zht$ori, levels = varimp_zht$ori)
+```
+
+
+
+```{r}
+# plot 
+viplt_zht <- ggplot(varimp_zht, aes(x=ori, y=varimp, group=1)) + 
+  geom_errorbar(aes(ymin=cilow, ymax=cihigh), width=.4) +
+  geom_line(colour="Magenta") +  
+  geom_point() +
+  labs(
+    title = "Variablenwichtigkeit in der Zuchtbetrieb-Gruppe",
+    x = "Variabeln",
+    y = "Wichtigkeit"
+  ) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) 
+viplt_zht
+```
+
+
+```{r}
+# save as csv
+readr::write_csv(varimp_zht, file = here::here("analysis/coef_zht.csv"))
+```
+
+
+```{r dev = "png", fig.show='hide'}
+# save plot
+png(width = 12, height = 8, here::here("figures/varimp_plot_zht.png"))
+viplt_zht
+dev.off()
+```
+
+
+## 2) Mäster
+
+```{r}
+# using base plot
+#adegraphics::ADEgS(list(plot(bootstrap_mst$vipc, main = "vipc", plot = FALSE)))
+```
+
+
+```{r}
+# overall coefficient
+varimp_mst <- GetVarImp(bootstrap_mst)
+
+# join with coefficients
+varimp_mst <- cbind(coef_mst, varimp_mst)
+
+# replace name with long name
+varimp_mst <- varimp_mst %>%
+  dplyr::left_join(longvarname, by = c("varname" = "new"))
+
+# variable name as ordered factor (for diagram layout)
+varimp_mst$ori <- factor(varimp_mst$ori, levels = varimp_mst$ori)
+```
+
+
+```{r}
+# plot 
+viplt_mst <- ggplot(varimp_mst, aes(x=ori, y=varimp, group=1)) + 
+  geom_errorbar(aes(ymin=cilow, ymax=cihigh), width=.4) +
+  geom_line(colour="Magenta") +  
+  geom_point() +
+  labs(
+    title = "Variablenwichtigkeit in der Mastbetriebe-Gruppe",
+    x = "Variabeln",
+    y = "Wichtigkeit"
+  ) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) 
+viplt_mst
+```
+
+
+```{r}
+# save as csv
+readr::write_csv(varimp_mst, file = here::here("analysis/coef_mst.csv"))
+```
+
+
+```{r dev = "png", fig.show='hide'}
+# save plot
+png(width = 12, height = 8, here::here("figures/varimp_plot_mst.png"))
+viplt_mst
+dev.off()
+```
+
+
+
+
+
+
+
+
+

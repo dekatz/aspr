@@ -1,0 +1,461 @@
+ori,new,source
+BetriebsId,betriebsid,ASP
+TVD-Nummer,tvdnummer,ASP
+SuisData-Nummer,suisdatanummer,ASP
+Sprache,sprache,ASP
+Vorname,vorname,ASP
+Name,name,ASP
+Strasse,strasse,ASP
+PLZ,plz,ASP
+Ort,ort,ASP
+Kanton,kanton,ASP
+Prod-Typ,prodtyp,ASP
+Label,label,ASP
+SGD-Status,sgdstatus,ASP
+Betreuer,betreuer,ASP
+Berater,berater,ASP
+Vermarkter,vermarkter,ASP
+ASP-Datum,aspdatum,ASP
+Gesamtergebnis,gesamtergebnis,ASP
+Lage des Betriebes (Y1),lagedesbetriebes,ASP
+Betriebslage,betriebslage,ASP
+Bauliche Voraussetzung,baulichvorsstzng,ASP
+"Betriebsorganisation, Personal",btrbsrgnstnprsnl,ASP
+Betriebsgelände (Schwarz-Weiss-Bereich),betrbsglndswbrch,ASP
+Zugang zum Gelände,zugangzumgelaend,ASP
+Abschimrung des Stalles  - Schwarz-Weiss-Gr. (Y2),abschmrngdsstswg,ASP
+Hygieneschleuse,hygieneschleuse,ASP
+Schutzbekleidung,schutzbekleidung,ASP
+Pausenraum,pausenraum,ASP
+Arbeitsabläufe - Managemt. des Betriebsallt. (Y3),arbtsblfmngmtdsb,ASP
+Verkehr auf dem Gelände,verkehraufdmglnd,ASP
+Tiertransporte,tiertransporte,ASP
+Kadaver,kadaver,ASP
+Mist und Gülle,mistundguelle,ASP
+Futter,futter,ASP
+Speziell für den Produktionszweig,spzllfrdnprdktns,ASP
+"Reinigung, Desinfektion und Schädlingsbek.",rngngdsnfktnunds,ASP
+OBJECTID,objectid,Adresse
+TVD-Nr.,tvdnummer,Adresse
+Name,name,Adresse
+Vorname,vorname,Adresse
+Zusatz,zusatz,Adresse
+Strasse,strasse,Adresse
+PLZ,plz,Adresse
+Ort,ort,Adresse
+Kanton SGD,kantonsgd,Adresse
+Berater,berater,Adresse
+Betreuung,betreuung,Adresse
+Telefon 1,telefon1,Adresse
+Natel,natel,Adresse
+Produktions-Typ,produktionstyp,Adresse
+SGD-Status,sgdstatus,Adresse
+Produktions-Programm,produktinsprgrmm,Adresse
+Label,label,Adresse
+Vermarkter,vermarkter,Adresse
+Bestandestierarzt,bestandestierrzt,Adresse
+Bestandesprobleme,bestandesproblem,Adresse
+Sauen,sauen,Adresse
+Mast,mast,Adresse
+Remonten,remonten,Adresse
+Eber,eber,Adresse
+Ferkel,ferkel,Adresse
+Letzter Beratungsbesuch,letztrbrtngsbsch,Adresse
+Ring-Nr.,ringnr,Adresse
+SUISAG-Nr.,betriebsid,Adresse
+Aktiv,aktiv,Adresse
+Adresse Breitengrad,lat,Adresse
+Adresse Längengrad,long,Adresse
+BehandlungsId,behandlungsid,Behandlungen
+BetriebsTVD-Nummer,tvdnummer,Behandlungen
+Betriebs-Id,betriebsid,Behandlungen
+erstes Behandlungsdatum,erstsbhndlngsdtm,Behandlungen
+letztes Behandlungsdatum,ltztsbhndlngsdtm,Behandlungen
+Tiergruppe,tiergruppe,Behandlungen
+Identifikation,identifikation,Behandlungen
+Anz. Tiere,anztiere,Behandlungen
+IdxOrgansystem,idxorgansystem,Behandlungen
+Organsystem,organsystem,Behandlungen
+IdxDiagnose,idxdiagnose,Behandlungen
+Behandlungsgrund Krankheit,bhndlngsgrndkrnk,Behandlungen
+IdxErwDiagnose,idxerwdiagnose,Behandlungen
+Erweiterte Diagnose,erweitertdiagnos,Behandlungen
+beh. Person,behperson,Behandlungen
+Medi-Id,mediid,Behandlungen
+Medi-Nr.,medinr,Behandlungen
+Herkunft Arzneimittel,herkunftarznmttl,Behandlungen
+Handelsname Arzneimittel,handlsnmarznmttl,Behandlungen
+Menge Arzneimittel,mengarzneimittel,Behandlungen
+Einheit Arzneimittel,einheitarznemttl,Behandlungen
+Anzahl Appl. Arzneimittel,anzhlapplarznmtt,Behandlungen
+Fleisch Absetzfrist in Tagen,flschabstzfrstit,Behandlungen
+Organe Absetzfrist in Tagen,orgnabstzfrstint,Behandlungen
+Inj.Stelle Absetzfrist in Tagen,injstllabstzfrit,Behandlungen
+Fleisch Freigabedatum,fleischfreigbdtm,Behandlungen
+Organe Freigabedatum,organfreigabedtm,Behandlungen
+Inj.Stelle Freigabedatum,injstellfregbdtm,Behandlungen
+Betriebs-ID Info,betriebsid,Gesundheitsbericht
+TVD-Nr. Info,tvdnummer,Gesundheitsbericht
+Name Info,name_info,Gesundheitsbericht
+PLZ Info,plz_info,Gesundheitsbericht
+Ort Info,ort_info,Gesundheitsbericht
+Produktionstyp Info,produktnstyp_info,Gesundheitsbericht
+Produktionsprogramm Info,prdktnsprgrm_info,Gesundheitsbericht
+Label Info,label_info,Gesundheitsbericht
+Ringart Info,ringart_info,Gesundheitsbericht
+Ring-Nr. Info,ringnr_info,Gesundheitsbericht
+SGD-Status Info,sgdstatus_info,Gesundheitsbericht
+Betreuer Info,betreuer_info,Gesundheitsbericht
+Berater Info,berater_info,Gesundheitsbericht
+BTA Info,bta_info,Gesundheitsbericht
+Vermarkter Info,vermarkter_info,Gesundheitsbericht
+Anzahl Sauen,sauen_info,Gesundheitsbericht
+Anzahl Absetzjager,absetzjager_info,Gesundheitsbericht
+Anzahl Remonten,remonten_info,Gesundheitsbericht
+Anzahl Eber,eber_info,Gesundheitsbericht
+Anzahl Mastplätze,mastplaetze_info,Gesundheitsbericht
+Protokollart Besuchsprotokoll,protokollart_beschsprtkll,Gesundheitsbericht
+Besuchsdatum Besuchsprotokoll,besuchsdatum_beschsprtkll,Gesundheitsbericht
+Alleinfutter Besuchsprotokoll,alleinfutter_beschsprtkll,Gesundheitsbericht
+Alleinfutterbezeichnung Besuchsprotokoll,allnfttrbzch_beschsprtkll,Gesundheitsbericht
+Futterkomponenten Besuchsprotokoll,futtrkmpnntn_beschsprtkll,Gesundheitsbericht
+Nebenprodukte Besuchsprotokoll,nebenprodukt_beschsprtkll,Gesundheitsbericht
+Gastrosuppen Besuchsprotokoll,gastrosuppen_beschsprtkll,Gesundheitsbericht
+Küchenabfälle Besuchsprotokoll,kuechenabfll_beschsprtkll,Gesundheitsbericht
+Schotte Besuchsprotokoll,schotte_beschsprtkll,Gesundheitsbericht
+Andere Futterprodukte Besuchsprotokoll,andrfttrprdk_beschsprtkll,Gesundheitsbericht
+LGF Wurf EBJ,lgfwurf_ebj,Gesundheitsbericht
+% tot geborene Ferkel EBJ,pctttgbrnfrk_ebj,Gesundheitsbericht
+% Abgänge SF EBJ,pctabgaengsf_ebj,Gesundheitsbericht
+% Abgänge AF EBJ,pctabgaengaf_ebj,Gesundheitsbericht
+% Abgänge Mast EBJ,pctabgangmst_ebj,Gesundheitsbericht
+TBI GS/Eber EBJ,tbigseber_ebj,Gesundheitsbericht
+TBI säug. Sauen EBJ,tbisaeugsaun_ebj,Gesundheitsbericht
+TBI Saugferkel EBJ,tbisaugferkl_ebj,Gesundheitsbericht
+TBI Absetzferkel EBJ,tbiabstzfrkl_ebj,Gesundheitsbericht
+TBI Mast/Remonten EBJ,tbimastrmntn_ebj,Gesundheitsbericht
+Besucherjournal Generell,besucherjrnl_generell,Gesundheitsbericht
+Eingliederungsstall Generell,engldrngsstl_generell,Gesundheitsbericht
+Verladeeinrichtung Generell,verldnrchtng_generell,Gesundheitsbericht
+Hygiene Eingangsbereich / Schleuse Generell,hygnengngsbs_generell,Gesundheitsbericht
+Besucherhygiene Generell,besucherhygn_generell,Gesundheitsbericht
+Instrumenten-/Gerätehygiene Generell,instrmntngrt_generell,Gesundheitsbericht
+Reinigung und Desinfektion Generell,rngngunddsnf_generell,Gesundheitsbericht
+"Fliegenbefall, -bekämpfung Generell",flgnbfllbkmp_generell,Gesundheitsbericht
+"Schadnagerspuren, -bekämpfung Generell",schdngrsprnb_generell,Gesundheitsbericht
+Rein-Raus Absetzjager,reinraus_absetzjager,Gesundheitsbericht
+Rein-Raus Vormast,reinraus_vormast,Gesundheitsbericht
+Rein-Raus Endmast,reinraus_endmast,Gesundheitsbericht
+Absonderungsmöglichk. Absetzjager,absndrngsmgl_absetzjager,Gesundheitsbericht
+Absonderungsmöglichk. Vormast,absndrngsmgl_vormast,Gesundheitsbericht
+Absonderungsmöglichk. Endmast,absndrngsmgl_endmast,Gesundheitsbericht
+Auslaufhaltung Absetzjager,auslaufhltng_absetzjager,Gesundheitsbericht
+Auslaufhaltung Eber,auslaufhltng_eber,Gesundheitsbericht
+Auslaufhaltung Vormast,auslaufhltng_vormast,Gesundheitsbericht
+Auslaufhaltung Endmast,auslaufhltng_endmast,Gesundheitsbericht
+Beschäftigung Absetzjager,beschaeftgng_absetzjager,Gesundheitsbericht
+Beschäftigung Eber,beschaeftgng_eber,Gesundheitsbericht
+Beschäftigung Vormast,beschaeftgng_vormast,Gesundheitsbericht
+Beschäftigung Endmast,beschaeftgng_endmast,Gesundheitsbericht
+Stallhygiene Absetzjager,stallhygiene_absetzjager,Gesundheitsbericht
+Stallhygiene Eber,stallhygiene_eber,Gesundheitsbericht
+Stallhygiene Vormast,stallhygiene_vormast,Gesundheitsbericht
+Stallhygiene Endmast,stallhygiene_endmast,Gesundheitsbericht
+Stallklima Absetzjager,stallklima_absetzjager,Gesundheitsbericht
+Stallklima Eber,stallklima_eber,Gesundheitsbericht
+Stallklima Vormast,stallklima_vormast,Gesundheitsbericht
+Stallklima Endmast,stallklima_endmast,Gesundheitsbericht
+Stalltemperatur Absetzjager,stalltemprtr_absetzjager,Gesundheitsbericht
+Stalltemperatur Eber,stalltemprtr_eber,Gesundheitsbericht
+Stalltemperatur Vormast,stalltemprtr_vormast,Gesundheitsbericht
+Stalltemperatur Endmast,stalltemprtr_endmast,Gesundheitsbericht
+Fütterungshygiene Absetzjager,futtrngshygn_absetzjager,Gesundheitsbericht
+Fütterungshygiene Eber,futtrngshygn_eber,Gesundheitsbericht
+Fütterungshygiene Vormast,futtrngshygn_vormast,Gesundheitsbericht
+Fütterungshygiene Endmast,futtrngshygn_endmast,Gesundheitsbericht
+Wasserversorgung Absetzjager,wassrvrsrgng_absetzjager,Gesundheitsbericht
+Wasserversorgung Eber,wassrvrsrgng_eber,Gesundheitsbericht
+Wasserversorgung Vormast,wassrvrsrgng_vormast,Gesundheitsbericht
+Wasserversorgung Endmast,wassrvrsrgng_endmast,Gesundheitsbericht
+Nährzustand Absetzjager,naehrzustand_absetzjager,Gesundheitsbericht
+Nährzustand Eber,naehrzustand_eber,Gesundheitsbericht
+Nährzustand Vormast,naehrzustand_vormast,Gesundheitsbericht
+Nährzustand Endmast,naehrzustand_endmast,Gesundheitsbericht
+Kümmerer Absetzjager,kuemmerer_absetzjager,Gesundheitsbericht
+Kümmerer Vormast,kuemmerer_vormast,Gesundheitsbericht
+Kümmerer Endmast,kuemmerer_endmast,Gesundheitsbericht
+Fieber Absetzjager,fieber_absetzjager,Gesundheitsbericht
+Fieber Eber,fieber_eber,Gesundheitsbericht
+Fieber Vormast,fieber_vormast,Gesundheitsbericht
+Fieber Endmast,fieber_endmast,Gesundheitsbericht
+Durchfall Absetzjager,durchfall_absetzjager,Gesundheitsbericht
+Durchfall Eber,durchfall_eber,Gesundheitsbericht
+Durchfall Vormast,durchfall_vormast,Gesundheitsbericht
+Durchfall Endmast,durchfall_endmast,Gesundheitsbericht
+ZNS-Störungen Absetzjager,znsstoerungn_absetzjager,Gesundheitsbericht
+ZNS-Störungen Eber,znsstoerungn_eber,Gesundheitsbericht
+ZNS-Störungen Vormast,znsstoerungn_vormast,Gesundheitsbericht
+ZNS-Störungen Endmast,znsstoerungn_endmast,Gesundheitsbericht
+Mortalität Absetzjager,mortalitaet_absetzjager,Gesundheitsbericht
+Mortalität Eber,mortalitaet_eber,Gesundheitsbericht
+Mortalität Vormast,mortalitaet_vormast,Gesundheitsbericht
+Mortalität Endmast,mortalitaet_endmast,Gesundheitsbericht
+Kannibalismus Absetzjager,kannibalisms_absetzjager,Gesundheitsbericht
+Kannibalismus Eber,kannibalisms_eber,Gesundheitsbericht
+Kannibalismus Vormast,kannibalisms_vormast,Gesundheitsbericht
+Kannibalismus Endmast,kannibalisms_endmast,Gesundheitsbericht
+Niesen Absetzjager,niesen_absetzjager,Gesundheitsbericht
+Niesen Eber,niesen_eber,Gesundheitsbericht
+Niesen Vormast,niesen_vormast,Gesundheitsbericht
+Niesen Endmast,niesen_endmast,Gesundheitsbericht
+Husten Absetzjager,husten_absetzjager,Gesundheitsbericht
+Husten Eber,husten_eber,Gesundheitsbericht
+Husten Vormast,husten_vormast,Gesundheitsbericht
+Husten Endmast,husten_endmast,Gesundheitsbericht
+Lahmheiten Absetzjager,lahmheiten_absetzjager,Gesundheitsbericht
+Lahmheiten Eber,lahmheiten_eber,Gesundheitsbericht
+Lahmheiten Vormast,lahmheiten_vormast,Gesundheitsbericht
+Lahmheiten Endmast,lahmheiten_endmast,Gesundheitsbericht
+Hautveränderungen Absetzjager,hautvrndrngn_absetzjager,Gesundheitsbericht
+Hautveränderungen Eber,hautvrndrngn_eber,Gesundheitsbericht
+Hautveränderungen Vormast,hautvrndrngn_vormast,Gesundheitsbericht
+Hautveränderungen Endmast,hautvrndrngn_endmast,Gesundheitsbericht
+Juckreiz Absetzjager,juckreiz_absetzjager,Gesundheitsbericht
+Juckreiz Eber,juckreiz_eber,Gesundheitsbericht
+Juckreiz Vormast,juckreiz_vormast,Gesundheitsbericht
+Juckreiz Endmast,juckreiz_endmast,Gesundheitsbericht
+Besucherjournal Generell,besucherjrnl_generell_dup,Gesundheitsbericht
+Eingliederungsstall Generell,engldrngsstl_generell_dup,Gesundheitsbericht
+Datenauswertung Generell,datenaswrtng_generell,Gesundheitsbericht
+Verladeeinrichtung Generell,verldnrchtng_generell_dup,Gesundheitsbericht
+Hygiene Eingangsbereich / Schleuse Generell,hygnengngsbs_generell_dup,Gesundheitsbericht
+Besucherhygiene Generell,besucherhygn_generell_dup,Gesundheitsbericht
+Instrumenten-/Gerätehygiene Generell,instrmntngrt_generell_dup,Gesundheitsbericht
+Eingriffe - Kastration Generell,engrffkstrtn_generell,Gesundheitsbericht
+Reinigung und Desinfektion Generell,rngngunddsnf_generell_dup,Gesundheitsbericht
+"Fliegenbefall, -bekämpfung Generell",flgnbfllbkmp_generell_dup,Gesundheitsbericht
+"Schadnagerspuren, -bekämpfung Generell",schdngrsprnb_generell_dup,Gesundheitsbericht
+Rein-Raus Säugende Sauen,reinraus_saeugendsaun,Gesundheitsbericht
+Rein-Raus Absetzjager,reinraus_absetzjager_dup,Gesundheitsbericht
+Rein-Raus Remonten,reinraus_remonten,Gesundheitsbericht
+Rein-Raus Mastjager,reinraus_mastjager,Gesundheitsbericht
+Absonderungsmöglichk. Absetzjager,absndrngsmgl_absetzjager_dup,Gesundheitsbericht
+Absonderungsmöglichk. Galtsauen,absndrngsmgl_galtsauen,Gesundheitsbericht
+Absonderungsmöglichk. Remonten,absndrngsmgl_remonten,Gesundheitsbericht
+Absonderungsmöglichk. Mastjager,absndrngsmgl_mastjager,Gesundheitsbericht
+Auslaufhaltung Säugende Sauen,auslaufhltng_saeugendsaun,Gesundheitsbericht
+Auslaufhaltung Absetzjager,auslaufhltng_absetzjager_dup,Gesundheitsbericht
+Auslaufhaltung Galtsauen,auslaufhltng_galtsauen,Gesundheitsbericht
+Auslaufhaltung Remonten,auslaufhltng_remonten,Gesundheitsbericht
+Auslaufhaltung Eber,auslaufhltng_eber_dup,Gesundheitsbericht
+Auslaufhaltung Mastjager,auslaufhltng_mastjager,Gesundheitsbericht
+Beschäftigung Säugende Sauen,beschaeftgng_saeugendsaun,Gesundheitsbericht
+Beschäftigung Absetzjager,beschaeftgng_absetzjager_dup,Gesundheitsbericht
+Beschäftigung Galtsauen,beschaeftgng_galtsauen,Gesundheitsbericht
+Beschäftigung Remonten,beschaeftgng_remonten,Gesundheitsbericht
+Beschäftigung Eber,beschaeftgng_eber_dup,Gesundheitsbericht
+Beschäftigung Mastjager,beschaeftgng_mastjager,Gesundheitsbericht
+Stallhygiene Säugende Sauen,stallhygiene_saeugendsaun,Gesundheitsbericht
+Stallhygiene Saugferkel,stallhygiene_saugferkel,Gesundheitsbericht
+Stallhygiene Absetzjager,stallhygiene_absetzjager_dup,Gesundheitsbericht
+Stallhygiene Galtsauen,stallhygiene_galtsauen,Gesundheitsbericht
+Stallhygiene Remonten,stallhygiene_remonten,Gesundheitsbericht
+Stallhygiene Eber,stallhygiene_eber_dup,Gesundheitsbericht
+Stallhygiene Mastjager,stallhygiene_mastjager,Gesundheitsbericht
+Stallklima Säugende Sauen,stallklima_saeugendsaun,Gesundheitsbericht
+Stallklima Saugferkel,stallklima_saugferkel,Gesundheitsbericht
+Stallklima Absetzjager,stallklima_absetzjager_dup,Gesundheitsbericht
+Stallklima Galtsauen,stallklima_galtsauen,Gesundheitsbericht
+Stallklima Remonten,stallklima_remonten,Gesundheitsbericht
+Stallklima Eber,stallklima_eber_dup,Gesundheitsbericht
+Stallklima Mastjager,stallklima_mastjager,Gesundheitsbericht
+Stalltemperatur Säugende Sauen,stalltemprtr_saeugendsaun,Gesundheitsbericht
+Stalltemperatur Saugferkel,stalltemprtr_saugferkel,Gesundheitsbericht
+Stalltemperatur Absetzjager,stalltemprtr_absetzjager_dup,Gesundheitsbericht
+Stalltemperatur Galtsauen,stalltemprtr_galtsauen,Gesundheitsbericht
+Stalltemperatur Remonten,stalltemprtr_remonten,Gesundheitsbericht
+Stalltemperatur Eber,stalltemprtr_eber_dup,Gesundheitsbericht
+Stalltemperatur Mastjager,stalltemprtr_mastjager,Gesundheitsbericht
+Fütterungshygiene Säugende Sauen,futtrngshygn_saeugendsaun,Gesundheitsbericht
+Fütterungshygiene Saugferkel,futtrngshygn_saugferkel,Gesundheitsbericht
+Fütterungshygiene Absetzjager,futtrngshygn_absetzjager_dup,Gesundheitsbericht
+Fütterungshygiene Galtsauen,futtrngshygn_galtsauen,Gesundheitsbericht
+Fütterungshygiene Remonten,futtrngshygn_remonten,Gesundheitsbericht
+Fütterungshygiene Eber,futtrngshygn_eber_dup,Gesundheitsbericht
+Fütterungshygiene Mastjager,futtrngshygn_mastjager,Gesundheitsbericht
+Wasserversorgung Säugende Sauen,wassrvrsrgng_saeugendsaun,Gesundheitsbericht
+Wasserversorgung Saugferkel,wassrvrsrgng_saugferkel,Gesundheitsbericht
+Wasserversorgung Absetzjager,wassrvrsrgng_absetzjager_dup,Gesundheitsbericht
+Wasserversorgung Galtsauen,wassrvrsrgng_galtsauen,Gesundheitsbericht
+Wasserversorgung Remonten,wassrvrsrgng_remonten,Gesundheitsbericht
+Wasserversorgung Eber,wassrvrsrgng_eber_dup,Gesundheitsbericht
+Wasserversorgung Mastjager,wassrvrsrgng_mastjager,Gesundheitsbericht
+Nährzustand Säugende Sauen,naehrzustand_saeugendsaun,Gesundheitsbericht
+Nährzustand Saugferkel,naehrzustand_saugferkel,Gesundheitsbericht
+Nährzustand Absetzjager,naehrzustand_absetzjager_dup,Gesundheitsbericht
+Nährzustand Galtsauen,naehrzustand_galtsauen,Gesundheitsbericht
+Nährzustand Remonten,naehrzustand_remonten,Gesundheitsbericht
+Nährzustand Eber,naehrzustand_eber_dup,Gesundheitsbericht
+Nährzustand Mastjager,naehrzustand_mastjager,Gesundheitsbericht
+Kümmerer Saugferkel,kuemmerer_saugferkel,Gesundheitsbericht
+Kümmerer Absetzjager,kuemmerer_absetzjager_dup,Gesundheitsbericht
+Kümmerer Remonten,kuemmerer_remonten,Gesundheitsbericht
+Kümmerer Mastjager,kuemmerer_mastjager,Gesundheitsbericht
+Fruchtbarkeit Säugende Sauen,fruchtbarket_saeugendsaun,Gesundheitsbericht
+Fruchtbarkeit Galtsauen,fruchtbarket_galtsauen,Gesundheitsbericht
+Fruchtbarkeit Remonten,fruchtbarket_remonten,Gesundheitsbericht
+Fruchtbarkeit Eber,fruchtbarket_eber,Gesundheitsbericht
+Milchfieber Säugende Sauen,milchfieber_saeugendsaun,Gesundheitsbericht
+Fieber Säugende Sauen,fieber_saeugendsaun,Gesundheitsbericht
+Fieber Saugferkel,fieber_saugferkel,Gesundheitsbericht
+Fieber Absetzjager,fieber_absetzjager_dup,Gesundheitsbericht
+Fieber Galtsauen,fieber_galtsauen,Gesundheitsbericht
+Fieber Remonten,fieber_remonten,Gesundheitsbericht
+Fieber Eber,fieber_eber_dup,Gesundheitsbericht
+Fieber Mastjager,fieber_mastjager,Gesundheitsbericht
+Durchfall Säugende Sauen,durchfall_saeugendsaun,Gesundheitsbericht
+Durchfall Saugferkel,durchfall_saugferkel,Gesundheitsbericht
+Durchfall Absetzjager,durchfall_absetzjager_dup,Gesundheitsbericht
+Durchfall Galtsauen,durchfall_galtsauen,Gesundheitsbericht
+Durchfall Remonten,durchfall_remonten,Gesundheitsbericht
+Durchfall Eber,durchfall_eber_dup,Gesundheitsbericht
+Durchfall Mastjager,durchfall_mastjager,Gesundheitsbericht
+ZNS-Störungen Säugende Sauen,znsstoerungn_saeugendsaun,Gesundheitsbericht
+ZNS-Störungen Saugferkel,znsstoerungn_saugferkel,Gesundheitsbericht
+ZNS-Störungen Absetzjager,znsstoerungn_absetzjager_dup,Gesundheitsbericht
+ZNS-Störungen Galtsauen,znsstoerungn_galtsauen,Gesundheitsbericht
+ZNS-Störungen Remonten,znsstoerungn_remonten,Gesundheitsbericht
+ZNS-Störungen Eber,znsstoerungn_eber_dup,Gesundheitsbericht
+ZNS-Störungen Mastjager,znsstoerungn_mastjager,Gesundheitsbericht
+Mortalität Säugende Sauen,mortalitaet_saeugendsaun,Gesundheitsbericht
+Mortalität Saugferkel,mortalitaet_saugferkel,Gesundheitsbericht
+Mortalität Absetzjager,mortalitaet_absetzjager_dup,Gesundheitsbericht
+Mortalität Galtsauen,mortalitaet_galtsauen,Gesundheitsbericht
+Mortalität Remonten,mortalitaet_remonten,Gesundheitsbericht
+Mortalität Eber,mortalitaet_eber_dup,Gesundheitsbericht
+Mortalität Mastjager,mortalitaet_mastjager,Gesundheitsbericht
+Kannibalismus Saugferkel,kannibalisms_saugferkel,Gesundheitsbericht
+Kannibalismus Absetzjager,kannibalisms_absetzjager_dup,Gesundheitsbericht
+Kannibalismus Galtsauen,kannibalisms_galtsauen,Gesundheitsbericht
+Kannibalismus Remonten,kannibalisms_remonten,Gesundheitsbericht
+Kannibalismus Mastjager,kannibalisms_mastjager,Gesundheitsbericht
+Niesen Säugende Sauen,niesen_saeugendsaun,Gesundheitsbericht
+Niesen Saugferkel,niesen_saugferkel,Gesundheitsbericht
+Niesen Absetzjager,niesen_absetzjager_dup,Gesundheitsbericht
+Niesen Galtsauen,niesen_galtsauen,Gesundheitsbericht
+Niesen Remonten,niesen_remonten,Gesundheitsbericht
+Niesen Eber,niesen_eber_dup,Gesundheitsbericht
+Niesen Mastjager,niesen_mastjager,Gesundheitsbericht
+Husten Säugende Sauen,husten_saeugendsaun,Gesundheitsbericht
+Husten Saugferkel,husten_saugferkel,Gesundheitsbericht
+Husten Absetzjager,husten_absetzjager_dup,Gesundheitsbericht
+Husten Galtsauen,husten_galtsauen,Gesundheitsbericht
+Husten Remonten,husten_remonten,Gesundheitsbericht
+Husten Eber,husten_eber_dup,Gesundheitsbericht
+Husten Mastjager,husten_mastjager,Gesundheitsbericht
+Lahmheiten Säugende Sauen,lahmheiten_saeugendsaun,Gesundheitsbericht
+Lahmheiten Saugferkel,lahmheiten_saugferkel,Gesundheitsbericht
+Lahmheiten Absetzjager,lahmheiten_absetzjager_dup,Gesundheitsbericht
+Lahmheiten Galtsauen,lahmheiten_galtsauen,Gesundheitsbericht
+Lahmheiten Remonten,lahmheiten_remonten,Gesundheitsbericht
+Lahmheiten Eber,lahmheiten_eber_dup,Gesundheitsbericht
+Lahmheiten Mastjager,lahmheiten_mastjager,Gesundheitsbericht
+Hautveränderungen Säugende Sauen,hautvrndrngn_saeugendsaun,Gesundheitsbericht
+Hautveränderungen Saugferkel,hautvrndrngn_saugferkel,Gesundheitsbericht
+Hautveränderungen Absetzjager,hautvrndrngn_absetzjager_dup,Gesundheitsbericht
+Hautveränderungen Galtsauen,hautvrndrngn_galtsauen,Gesundheitsbericht
+Hautveränderungen Remonten,hautvrndrngn_remonten,Gesundheitsbericht
+Hautveränderungen Eber,hautvrndrngn_eber_dup,Gesundheitsbericht
+Hautveränderungen Mastjager,hautvrndrngn_mastjager,Gesundheitsbericht
+Juckreiz Säugende Sauen,juckreiz_saeugendsaun,Gesundheitsbericht
+Juckreiz Saugferkel,juckreiz_saugferkel,Gesundheitsbericht
+Juckreiz Absetzjager,juckreiz_absetzjager_dup,Gesundheitsbericht
+Juckreiz Galtsauen,juckreiz_galtsauen,Gesundheitsbericht
+Juckreiz Remonten,juckreiz_remonten,Gesundheitsbericht
+Juckreiz Eber,juckreiz_eber_dup,Gesundheitsbericht
+Juckreiz Mastjager,juckreiz_mastjager,Gesundheitsbericht
+JAHR,jahr,LSG
+QUARTAL,quartal,LSG
+TVDNR,tvdnummer,LSG
+MAXBETRIEBSNR,maxbetriebsnr,LSG
+ANZAHLBETRIEBSNR,anzahlbetriebsnr,LSG
+LEBENDGEBFERKEL,lebendgebferkel,LSG
+TOTGEBFERKEL,totgebferkel,LSG
+ABGSFERKEL,abgsferkel,LSG
+VERLUSTSAUFERKEL,verlustsauferkel,LSG
+VERLUSTABSFERKEL,verlustabsferkel,LSG
+ABGMASTSCHWEINE,abgmastschweine,LSG
+ABGMSUNDEBER,abgmsundeber,LSG
+JAHR,jahr,TBI
+QUARTAL,quartal,TBI
+TVDNR,tvdnummer,TBI
+MAXBETRIEBSNR,maxbetriebsnr,TBI
+ANZAHLBETRIEBSNR,anzahlbetriebsnr,TBI
+TIERKATEGORIE,tierkategorie,TBI
+TBI,tbi_val,TBI
+"Filter Produktionstyp : Züchter, Mäster, Hybrid",type2_info,self calculated
+"Filter Ringart : drop, keep",afpring_info,self calculated
+Symptomscore Säugende Sauen ,smscore_saeugendsaun,self calculated
+Symptomscore Saugferkel,smscore_saugferkel,self calculated
+Symptomscore Galtsauen,smscore_galtsauen,self calculated
+Symptomscore Absetzjager,smscore_absetzjager,self calculated
+Symptomscore Remonten,smscore_remonten,self calculated
+Symptomscore Eber,smscore_eber,self calculated
+Symptomscore Mastjager,smscore_mastjager,self calculated
+Symptomscore Vormast,smscore_vormast,self calculated
+Symptomscore Endmast,smscore_endmast,self calculated
+Abgänge 2020 Q4 Verluste Mastschweine,lsg_2020_4_abgmastschweine,self calculated
+Abgänge 2020 Q4 Abgmsundeber,lsg_2020_4_abgmsundeber,self calculated
+Abgänge 2020 Q4 Abgsferkel,lsg_2020_4_abgsferkel,self calculated
+Abgänge 2020 Q4 Anzahl lebend geborene Ferkel,lsg_2020_4_lebendgebferkel,self calculated
+Abgänge 2020 Q4 Anzahl tot geborene Ferkel,lsg_2020_4_totgebferkel,self calculated
+Abgänge 2020 Q4 Verluste Absetzferkel,lsg_2020_4_verlustabsferkel,self calculated
+Abgänge 2020 Q4 Verluste Sauferkel,lsg_2020_4_verlustsauferkel,self calculated
+Abgänge 2021 Q1 Verluste Mastschweine,lsg_2021_1_abgmastschweine,self calculated
+Abgänge 2021 Q1 Abgmsundeber,lsg_2021_1_abgmsundeber,self calculated
+Abgänge 2021 Q1 Abgsferkel,lsg_2021_1_abgsferkel,self calculated
+Abgänge 2021 Q1 Anzahl lebend geborene Ferkel,lsg_2021_1_lebendgebferkel,self calculated
+Abgänge 2021 Q1 Anzahl tot geborene Ferkel,lsg_2021_1_totgebferkel,self calculated
+Abgänge 2021 Q1 Verluste Absetzferkel,lsg_2021_1_verlustabsferkel,self calculated
+Abgänge 2021 Q1 Verluste Sauferkel,lsg_2021_1_verlustsauferkel,self calculated
+Abgänge 2021 Q2 Verluste Mastschweine,lsg_2021_2_abgmastschweine,self calculated
+Abgänge 2021 Q2 Abgmsundeber,lsg_2021_2_abgmsundeber,self calculated
+Abgänge 2021 Q2 Abgsferkel,lsg_2021_2_abgsferkel,self calculated
+Abgänge 2021 Q2 Anzahl lebend geborene Ferkel,lsg_2021_2_lebendgebferkel,self calculated
+Abgänge 2021 Q2 Anzahl tot geborene Ferkel,lsg_2021_2_totgebferkel,self calculated
+Abgänge 2021 Q2 Verluste Absetzferkel,lsg_2021_2_verlustabsferkel,self calculated
+Abgänge 2021 Q2 Verluste Sauferkel,lsg_2021_2_verlustsauferkel,self calculated
+TbI 2020 Q4 Absetzferkel,tbi_2020_4_absetzferkel,self calculated
+TbI 2020 Q4 Galtsauen/Eber,tbi_2020_4_galtsauenebr,self calculated
+TbI 2020 Q4 Mastschweine,tbi_2020_4_mastschweine,self calculated
+TbI 2020 Q4 Saugferkel,tbi_2020_4_saugferkel,self calculated
+TbI 2020 Q4 Säugende Mutterschweine,tbi_2020_4_sgndmttrschw,self calculated
+TbI 2021 Q1 Absetzferkel,tbi_2021_1_absetzferkel,self calculated
+TbI 2021 Q1 Galtsauen/Eber,tbi_2021_1_galtsauenebr,self calculated
+TbI 2021 Q1 Mastschweine,tbi_2021_1_mastschweine,self calculated
+TbI 2021 Q1 Saugferkel,tbi_2021_1_saugferkel,self calculated
+TbI 2021 Q1 Säugende Mutterschweine,tbi_2021_1_sgndmttrschw,self calculated
+TbI 2021 Q2 Absetzferkel,tbi_2021_2_absetzferkel,self calculated
+TbI 2021 Q2 Galtsauen/Eber,tbi_2021_2_galtsauenebr,self calculated
+TbI 2021 Q2 Mastschweine,tbi_2021_2_mastschweine,self calculated
+TbI 2021 Q2 Saugferkel,tbi_2021_2_saugferkel,self calculated
+TbI 2021 Q2 Säugende Mutterschweine,tbi_2021_2_sgndmttrschw,self calculated
+TbI 2021 Q3 Absetzferkel,tbi_2021_3_absetzferkel,self calculated
+TbI 2021 Q3 Galtsauen/Eber,tbi_2021_3_galtsauenebr,self calculated
+TbI 2021 Q3 Mastschweine,tbi_2021_3_mastschweine,self calculated
+TbI 2021 Q3 Saugferkel,tbi_2021_3_saugferkel,self calculated
+TbI 2021 Q3 Säugende Mutterschweine,tbi_2021_3_sgndmttrschw,self calculated
+Abgedeckte Pathogens von Impfstpff (Summe),pathogen_ttl,self calculated
+Abgedeckte Pathogens von Impfstpff (Anzahl),pathogen_count,self calculated
+Durchschn. Anzahl lebend geborene Ferkel,lsg_lebendgebferkel,self calculated
+Durchschn. Anzahl tot geborene Ferkel,lsg_totgebferkel,self calculated
+Durchschn. Abgsferkel,lsg_abgsferkel,self calculated
+Durchschn. Verluste Sauferkel,lsg_verlustsauferkel,self calculated
+Durchschn. Verluste Absetzferkel,lsg_verlustabsferkel,self calculated
+Durchschn. Verluste Mastschweine,lsg_abgmastschweine,self calculated
+Durchschn. Abgmsundeber,lsg_abgmsundeber,self calculated
+Durchschn. TbI Absetzferkel,tbiavg_Absetzferkel,self calculated
+Durchschn. TbI Galtsauen/Eber,tbiavg_Galtsauen.Eber,self calculated
+Durchschn. TbI Mastschweine,tbiavg_Mastschweine,self calculated
+Durchschn. TbI Säugende Mutterschweine,tbiavg_Säugende.Mutterschweine,self calculated
+Durchschn. TbI Saugferkel,tbiavg_Saugferkel,self calculated

@@ -1,0 +1,346 @@
+=============================================
+Pretreatment of the raw data
+=============================================
+
+Some raw data (csv files) have around 500'000 rows. Depending on the computation capacity, usually it requires a long time to directly ingest and exploring them in R. Instead, we will use sqlite and some linux command lines.     
+
+=============================================
+An example of problem when directly ingest data in R
+=============================================
+
+Unsupervised learning with PCA:
+
+> pcafit.dep <- CalcPCA(mergedtbl.db, dropcols = c(dropnacol, dropcolother)) # dep, 
+Warning in result_fetch(res@ptr, n = n) :
+  Column `flschabstzfrstit`: mixed type, first seen values of type real, coercing other values of type string
+Warning in result_fetch(res@ptr, n = n) :
+  Column `orgnabstzfrstint`: mixed type, first seen values of type real, coercing other values of type string
+Warning in result_fetch(res@ptr, n = n) :
+  Column `injstllabstzfrit`: mixed type, first seen values of type real, coercing other values of type string
+  
+The above errors indicates that some inconsistency of data types in some of the columns. The easiest way to fix it it by fixing the raw csv file. Below are the steps to do that.
+
+=============================================
+# Step 1: convert encoding and remove header
+=============================================
+
+iconv -f windows-1252 -t utf-8 'Job354_Behandlungen_20-4 bis 21-3_20220121.csv' > job_noheader_bis_213.csv &&
+iconv -f windows-1252 -t utf-8 'Job354_Behandlungen_20-4 bis 21-4_20220121.csv' > job_noheader_bis_214.csv &&
+sed -i '1d' job_noheader_bis_213.csv &&
+sed -i '1d' job_noheader_bis_214.csv 
+
+=============================================
+# Step 2: check and remove which rows has incomplete fields
+=============================================
+
+awk -F ";" '{if(NF!=28) print NR}' job_noheader_bis_213.csv &&
+
+sed -i "46663d; 46664d; 118775d; 118776d; 118777d; 118778d" job_noheader_bis_213.csv &&
+
+awk -F ";" '{if(NF!=28) print NR}' job_noheader_bis_214.csv &&
+
+sed -i "149399d; 149400d; 221511d; 221512d; 221513d; 221514d" job_noheader_bis_214.csv 
+
+=============================================
+# Step 3: check if column contents are consistent
+=============================================
+To check if all rows are consistently numeric. Replace all $xx with numeric column:
+
+awk 'BEGIN{FS=";"} {if($13 !~ /^[0-9]+$/) print NR " : " $13}  NR==10{exit}' job_noheader_bis_213.csv 
+
+----------- file 214, problematic col shown by R prcom
+awk 'BEGIN{FS=";"} {if($22 !~ /^[0-9]+$/) print NR " : " $22}  NR==10{exit}' job_noheader_bis_213.csv 
+awk 'BEGIN{FS=";"} {if($23 !~ /^[0-9]+$/) print NR " : " $23}  NR==10{exit}' job_noheader_bis_213.csv 
+awk 'BEGIN{FS=";"} {if($24 !~ /^[0-9]+$/) print NR " : " $24}  NR==10{exit}' job_noheader_bis_213.csv 
+
+Test sum:
+
+awk -F ';' '{sum += $22} END {print sum}' job_noheader_bis_213.csv 
+awk -F ';' '{sum += $23} END {print sum}' job_noheader_bis_213.csv 
+awk -F ';' '{sum += $24} END {print sum}' job_noheader_bis_213.csv 
+
+----------- file 214, other problematic col
+
+Handling problematic col: 13, 20
+
+col $13 has NA, this is how to replace it:
+
+awk -F, -vOFS=, '$13==""{$13="NA"}' job_noheader_bis_213.csv 
+
+
+col $20 is number with 9 decimal point. to format printing decimal point use:
+
+awk -F ";" '{printf NR " : %.3f\n", $20} NR==20{exit}' job_noheader_bis_213.csv 
+
+----------- file 214, problematic col shown by R prcom
+
+awk 'BEGIN{FS=";"} {if($22 !~ /^[0-9]+$/) print NR " : " $22}  NR==10{exit}' job_noheader_bis_214.csv 
+awk 'BEGIN{FS=";"} {if($23 !~ /^[0-9]+$/) print NR " : " $23}  NR==10{exit}' job_noheader_bis_214.csv 
+awk 'BEGIN{FS=";"} {if($24 !~ /^[0-9]+$/) print NR " : " $24}  NR==10{exit}' job_noheader_bis_214.csv 
+
+test sum:
+
+awk -F ';' '{sum += $22} END {print sum}' job_noheader_bis_214.csv 
+awk -F ';' '{sum += $23} END {print sum}' job_noheader_bis_214.csv 
+awk -F ';' '{sum += $24} END {print sum}' job_noheader_bis_214.csv 
+
+------------ other error: unescaped " character
+
+sqlite> .import "../data/job_noheader_bis_213.csv" bhd_bis213
+../data/job_noheader_bis_213.csv:186079: unescaped " character
+../data/job_noheader_bis_213.csv:189086: unescaped " character
+../data/job_noheader_bis_213.csv:189087: unescaped " character
+../data/job_noheader_bis_213.csv:338576: unescaped " character
+../data/job_noheader_bis_213.csv:359149: unescaped " character
+../data/job_noheader_bis_213.csv:359150: unescaped " character
+../data/job_noheader_bis_213.csv:359151: unescaped " character
+../data/job_noheader_bis_213.csv:360945: unescaped " character
+../data/job_noheader_bis_213.csv:381893: unescaped " character
+../data/job_noheader_bis_213.csv:186078: expected 28 columns but found 17 - filling the rest with NULL
+
+use this command to see the unescaped " character (due incomplete quotation):
+
+$ nl job_noheader_bis_213.csv | grep '"' | awk -F';' '{ print $0 }' 
+$ nl job_noheader_bis_214.csv | grep '"' | awk -F';' '{ print $0 }' 
+
+looks like field $7 is problematic:
+
+$ nl job_noheader_bis_214.csv | grep '"' | awk -F';' '{ print NR " : " $7 }' 
+1 : S2
+2 : bis 20.12.21
+3 : S1
+4 : S2
+5 : S1
+6 : S2
+7 : B20
+8 : bucht 2 " 6 + 11
+9 : 5444, 9669, 9715, 8173, 8276, 9676
+10 : "4017
+11 : "4017
+12 : "4017
+13 : "4017
+14 : 172/124/189/155/162/11/169/141/ 129/130/100/109/146/82/88/112/171/139/140/170/188/148/136/190/81"2
+15 : 8457vd6 (40 ". 78)
+16 : 8457vd6 (40 ". 78)
+17 : 8457vd6 (40 ". 78)
+18 : V M "/67
+19 : Abferkeln
+20 : E M 2" + A99-1o6-108
+21 : BOX 1 BOX "
+
+$ nl job_noheader_bis_213.csv | grep '"' | awk -F';' '{ print NR " : " $7 }'
+1 : B20
+2 : bucht 2 " 6 + 11
+3 : 5444, 9669, 9715, 8173, 8276, 9676
+4 : "4017
+5 : "4017
+6 : "4017
+7 : "4017
+8 : 172/124/189/155/162/11/169/141/ 129/130/100/109/146/82/88/112/171/139/140/170/188/148/136/190/81"2
+9 : 8457vd6 (40 ". 78)
+10 : 8457vd6 (40 ". 78)
+11 : 8457vd6 (40 ". 78)
+12 : V M "/67
+13 : Abferkeln
+14 : E M 2" + A99-1o6-108
+15 : BOX 1 BOX "
+
+------------ replace all quote and save it to new file, and when we rund the file again, the result is empty
+
+sed 's/\"//g' job_noheader_bis_213.csv > job_noheader_cleaned_bis_213.csv
+
+nl job_noheader_cleaned_bis_213.csv | grep '"' | awk -F';' '{ print NR " : " $7 }'
+
+sed 's/\"//g' job_noheader_bis_214.csv > job_noheader_cleaned_bis_214.csv
+
+nl job_noheader_cleaned_bis_214.csv | grep '"' | awk -F';' '{ print NR " : " $7 }'
+
+=================================================
+# Step 4: put quote around date column 
+=================================================
+
+----------- method 1: this doesn't seem to work. sqlite date still have year 7202
+
+awk -F";" 'BEGIN{ OFS=FS } {$4="\""$4"\""; $5="\""$5"\""; $26="\""$26"\""; $27="\""$27"\""; $28="\""$28"\""; print $0}' < job_noheader_cleaned_bis_213.csv > job_noheader_cleaned_quote_bis_213.csv
+
+awk -F";" 'BEGIN{ OFS=FS } {$4="\""$4"\""; $5="\""$5"\""; $26="\""$26"\""; $27="\""$27"\""; $28="\""$28"\""; print $0}' < job_noheader_cleaned_bis_214.csv > job_noheader_cleaned_quote_bis_214.csv
+
+----------- method 2: reformat the date following sqlite format %Y-%m-%d
+
+awk -F";" 'BEGIN{ OFS=FS } { $4 = substr($4,7,4)"-"substr($4,4,2)"-"substr($4,1,2); $5 = substr($5,7,4)"-"substr($5,4,2)"-"substr($5,1,2); $26 = substr($26,7,4)"-"substr($26,4,2)"-"substr($26,1,2); $27 = substr($27,7,4)"-"substr($27,4,2)"-"substr($27,1,2); $28 = substr($28,7,4)"-"substr($28,4,2)"-"substr($28,1,2); print }' < job_noheader_cleaned_bis_213.csv > job_noheader_cleaned_quote_bis_213.csv
+
+awk -F";" 'BEGIN{ OFS=FS } { $4 = substr($4,7,4)"-"substr($4,4,2)"-"substr($4,1,2); $5 = substr($5,7,4)"-"substr($5,4,2)"-"substr($5,1,2); $26 = substr($26,7,4)"-"substr($26,4,2)"-"substr($26,1,2); $27 = substr($27,7,4)"-"substr($27,4,2)"-"substr($27,1,2); $28 = substr($28,7,4)"-"substr($28,4,2)"-"substr($28,1,2); print }' < job_noheader_cleaned_bis_214.csv > job_noheader_cleaned_quote_bis_214.csv
+
+--- try to get the date after
+
+awk -F";" 'BEGIN{ OFS=FS } {print NR ";" $1 ";" $4 ";" $5 ";" $26 ";" $27 ";" $28}' job_noheader_cleaned_quote_bis_213.csv > job_checkdate_213.csv
+
+awk -F";" 'BEGIN{ OFS=FS } {print NR ";" $1 ";" $4 ";" $5 ";" $26 ";" $27 ";" $28}' job_noheader_cleaned_quote_bis_214.csv > job_checkdate_214.csv
+
+
+CREATE TABLE checkdate (
+tblid INTEGER, 
+behandlungsid TEXT,
+erstsbhndlngsdtm TEXT,
+ltztsbhndlngsdtm TEXT,
+fleischfreigbdtm TEXT,
+organfreigabedtm TEXT,
+injstellfregbdtm TEXT
+);
+
+.mode csv
+.separator ; 
+.import "../data/job_checkdate_214.csv" checkdate
+
+SELECT ltztsbhndlngsdtm, strftime('%Y', ltztsbhndlngsdtm ) as year
+FROM checkdate order by year desc limit 10;
+
+SELECT erstsbhndlngsdtm, strftime('%Y', erstsbhndlngsdtm ) as year
+FROM checkdate order by year desc limit 10;
+
+SELECT fleischfreigbdtm, strftime('%Y', fleischfreigbdtm ) as year
+FROM checkdate order by year desc limit 10;
+
+SELECT organfreigabedtm, strftime('%Y', organfreigabedtm ) as year
+FROM checkdate order by year desc limit 10;
+
+SELECT tblid, injstellfregbdtm, strftime('%Y', injstellfregbdtm ) as year
+FROM checkdate order by year desc limit 10;
+
+------ looks like the year 7202 is really come from the raw file
+
+sed -n 205577p job_checkdate_214.csv
+
+> 205577;1662886;2021-07-09;7202-10-11;7202-10-17;7202-10-17;7202-10-17
+
+sed -n 205577p job_noheader_cleaned_bis_214.csv 
+
+> 1662886;1572261;34135.1;09.07.2021;11.10.7202;Mastschweine;Bucht1, Spannferkel 7171;1;1;Bewegungsapparat;3;Gelenksentzündung / Arthritis;;;Hartmann;26648;000000053611-02;Nutztierpraxis Rudolph;Procacillin ad us. vet., Injektionssuspension;15.000;ml;3;5;5;5;17.10.7202;17.10.7202;17.10.7202
+
+sed -n 205577p job_noheader_bis_214.csv 
+
+> 1662886;1572261;34135.1;09.07.2021;11.10.7202;Mastschweine;Bucht1, Spannferkel 7171;1;1;Bewegungsapparat;3;Gelenksentzündung / Arthritis;;;Hartmann;26648;000000053611-02;Nutztierpraxis Rudolph;Procacillin ad us. vet., Injektionssuspension;15.000;ml;3;5;5;5;17.10.7202;17.10.7202;17.10.7202
+
+=================================================
+Step 5: compare 2 tables in sqlite
+=================================================
+~/miniconda3/envs/r4base/bin/sqlite3 asp.db
+
+Anomaly found: Some date column has year "7202". For the analysis, we assume these observations belongs to year 2020 (01_extract_features.R line 98).
+
+11.10.7202;7202-10-11;7202
+05.06.4022;4022-06-05;4022
+21.09.4021;4021-09-21;4021
+21.09.4021;4021-09-21;4021
+30.08.4021;4021-08-30;4021
+30.08.4021;4021-08-30;4021
+11.12.4021;4021-12-11;4021
+11.12.4021;4021-12-11;4021
+
+
+==================================================
+
+SELECT ltztsbhndlngsdtm, 
+(substr(ltztsbhndlngsdtm,7,4) || '-' || substr(ltztsbhndlngsdtm,4,2) || '-' || substr(ltztsbhndlngsdtm,1,2)) as dateconverted,
+strftime('%Y', (substr(ltztsbhndlngsdtm,7,4) || '-' || substr(ltztsbhndlngsdtm,4,2) || '-' || substr(ltztsbhndlngsdtm,1,2)) ) as year
+FROM bhd_bis214 order by year desc limit 10;
+
+SELECT ltztsbhndlngsdtm, strftime('%Y', ltztsbhndlngsdtm ) as year
+FROM bhd_bis213 order by year desc limit 10;
+
+SELECT ltztsbhndlngsdtm, strftime('%Y', ltztsbhndlngsdtm ) as year
+FROM bhd_bis214 order by year desc limit 10;
+
+==================================================
+
+SELECT
+  b.betriebsid, 
+  b.tvdnummer,
+  b.behandlungsid, 
+  a.gesamtergebnis
+FROM
+  bhd_bis214 b
+LEFT JOIN aspresults a ON
+  b.betriebsid = a.betriebsid AND
+  b.tvdnummer = a.tvdnummer
+WHERE
+  b.betriebsid = '4948.1'
+GROUP BY
+  b.betriebsid,
+  b.tvdnummer 
+ORDER BY
+   b.behandlungsid DESC;
+==================================================
+
+SELECT
+  b.betriebsid, 
+  b.tvdnummer,
+  COUNT (b.behandlungsid) AS cnt  
+FROM
+  bhd_bis214 b
+WHERE
+  b.betriebsid = '43255.1';
+
+1  strftime('%m', b.erstsbhndlngsdtm ) as m_erstsb,
+2  strftime('%m', b.ltztsbhndlngsdtm ) as m_letztsb,
+3  strftime('%m', b.fleischfreigbdtm ) as m_fleischfreigb,
+4  strftime('%m', b.organfreigabedtm ) as m_organfreigabe,
+5  strftime('%m', b.injstellfregbdtm ) as m_injstellfregb,
+
+=IF(ISBLANK(E2), "empty", IF(E2>=80,"above 80",IF(E2>=70,"between 70-80", IF(E2>=60,"between 60-70","lower than 60"))))
+
+===================================================
+
+check column available by type
+
+select
+g.zuchtbetrieb_eber,
+g.auslaufhltng_eber,
+g.beschaeftgng_eber,
+g.stallhygiene_eber,
+g.stallklima_eber,
+g.stalltemprtr_eber,
+g.futtrngshygn_eber,
+g.wassrvrsrgng_eber,
+g.naehrzustand_eber,
+g.fieber_eber,
+g.durchfall_eber,
+g.znsstoerungn_eber,
+g.mortalitaet_eber,
+g.kannibalisms_eber,
+g.niesen_eber,
+g.husten_eber,
+g.lahmheiten_eber,
+g.hautvrndrngn_eber,
+g.juckreiz_eber,
+g.auslaufhltng_eber_dup,
+g.beschaeftgng_eber_dup,
+g.stallhygiene_eber_dup,
+g.stallklima_eber_dup,
+g.stalltemprtr_eber_dup,
+g.futtrngshygn_eber_dup,
+g.wassrvrsrgng_eber_dup,
+g.naehrzustand_eber_dup,
+g.fruchtbarket_eber,
+g.fieber_eber_dup,
+g.durchfall_eber_dup,
+g.znsstoerungn_eber_dup,
+g.mortalitaet_eber_dup,
+g.niesen_eber_dup,
+g.husten_eber_dup,
+g.lahmheiten_eber_dup,
+g.hautvrndrngn_eber_dup,
+g.juckreiz_eber_dup
+a.gesamtergebnis,
+a.lagedesbetriebes,
+a.abschmrngdsstswg,
+a.arbtsblfmngmtdsb
+FROM
+  gbr g
+LEFT JOIN aspresults a ON
+  a.betriebsid = a.betriebsid AND g.tvdnummer = g.tvdnummer
+ORDER BY
+   a.gesamtergebnis DESC limit 10;
+   
+==================================================
+Done!

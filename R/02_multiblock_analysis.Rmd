@@ -1,0 +1,362 @@
+---
+title: "Multiblock Analysis"
+author: "Dessy"
+date: '2022-03-07'
+output: html_document
+---
+
+# Set working directory 
+
+
+```{r setup, cache=FALSE, include=FALSE}
+library(knitr)
+wd_path <- Sys.getenv("PWD") # or set a work directory of your choice
+knitr::opts_knit$set(upload.fun = imgur_upload, self.contained = FALSE,
+              root.dir = wd_path) 
+```
+
+
+```{r}
+# load library
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(here, readr, stargazer, corrr, corrplot, ggpubr, zoo, lubridate, tidyverse, ggplot2, rsample, ade4, adegraphics)
+
+# set reference path 
+if(!file.exists(paste0(wd_path, ".here"))) here::set_here(path = wd_path)
+
+# load functions
+source(here::here("R/utils.R"))
+
+# load data
+load(here::here('analysis/feature_extracted_1.Rdata'))
+
+# set system time zone
+Sys.setenv(TZ='Europe/Zurich')
+```
+
+
+
+```{r}
+# file sources
+file1 <- here::here("data/ASP Risikoampel bis 01.11.2021.xlsx")
+file2 <- here::here("data/Adressen_Bauernhoefe.xlsx")
+
+# read the head
+asp_head <- readxl::read_excel(file1, sheet = "AspUebersicht", skip = 1, n_max = 2, col_names = FALSE)
+
+# create ref table
+asp_head_clean <- data.frame(ori = as.character(asp_head[1,]),
+                       new = cleanup_colname(as.character(asp_head[1,]))[[2]])
+
+# No duplicate col names?
+nrow(asp_head_clean[duplicated(asp_head_clean$new),]) == 0
+
+# load data
+asp <- readxl::read_excel(file1, sheet = "AspUebersicht", skip = 3, col_names = as.character(asp_head_clean$new))
+
+# save date as text, since we're going to use it in sqlite db
+asp <- asp %>%
+  mutate(aspdatum = as.character(aspdatum))
+
+# read head
+adr_head <- readxl::read_excel(file2, skip = 0, n_max = 1, col_names = FALSE)
+
+adr_head_clean <- data.frame(ori = as.character(adr_head[1,]),
+                       new = cleanup_colname(adr_head[1,])[[2]], stringsAsFactors = FALSE)
+
+# update lat long description
+adr_head_clean[ adr_head_clean$ori == "x", "ori"] <- "Adresse Breitengrad"
+adr_head_clean[ adr_head_clean$ori == "y", "ori"] <- "Adresse Längengrad"
+
+# read file
+adresse <- readxl::read_excel(file2, skip = 1,
+  col_types=c(rep("text", 20), rep("numeric", 5), "date", "text", "text", "numeric", "numeric", "numeric"),
+  col_names = adr_head_clean$new)
+
+adresse <- adresse %>%
+  dplyr::rename_at(vars("tvdnr", "suisagnr", "x", "y"), ~c("tvdnummer", "betriebsid", "lat", "long"))
+
+# update headers
+adr_head_clean$new <- names(adresse)
+
+# Alternative join: use vollname (Name + Vorname) as key to join tables
+asp$vollname <- gsub("NA", "", paste(asp$name, asp$vorname, sep=" "))
+adresse$vollname <- gsub("NA", "", paste(adresse$name, adresse$vorname, sep=" "))
+
+# Merge data
+# 2.1. ASP + Adresse
+asp_adr <- merge(asp,
+                 adresse[, c("betriebsid", "lat", "long")],
+                 by="betriebsid",
+                 all.x=TRUE, all.y=FALSE)
+
+# remove unused
+#rm(asp_head, adr_head, asp, adresse, file1, file2)
+```
+
+
+```{r}
+# subset symptoms
+symptoms_subdf <- gbr_symptoms %>% 
+  select(betriebsid, ends_with('_info'), starts_with('smscore_')) %>%
+  select(-ttlpig_info) %>%
+  dplyr::relocate(starts_with("smscore_"), .after = last_col())
+
+```
+
+
+# check correlation lat - long - number of animal - sprache
+
+```{r}
+corr_check <- asp_adr %>%
+  left_join(symptoms_subdf, by = c('betriebsid')) %>%
+  select(lat, long, sauen_info, absetzjager_info, remonten_info, eber_info, mastplaetze_info) %>%
+  rowwise() %>%
+  mutate(nanimal = sum(across( c(sauen_info:mastplaetze_info), ~sum(.x, na.rm = TRUE) ))) %>%
+  ungroup() %>%
+  filter(rowSums(is.na(.)) < 5 ) %>%
+  select(-sauen_info, -absetzjager_info, -remonten_info, -eber_info, -mastplaetze_info)
+```
+
+# correlation between lat vs number of animal
+
+```{r}
+ggpubr::ggscatter(corr_check, x = "lat", y = "nanimal", 
+          add = "reg.line", conf.int = TRUE, 
+          cor.coef = TRUE, cor.method = "pearson")
+```
+
+# correlation between long vs number of animal
+
+```{r}
+ggpubr::ggscatter(corr_check, x = "long", y = "nanimal", 
+          add = "reg.line", conf.int = TRUE, 
+          cor.coef = TRUE, cor.method = "pearson")
+```
+
+# Separate data into 2 groups: Mäster & Züchter
+
+```{r}
+# Mäster : merge data into 1 table
+mbdat_mst <- asp_adr %>%
+  select(betriebsid, tvdnummer, lat, long, lagedesbetriebes, abschmrngdsstswg, arbtsblfmngmtdsb) %>%
+  left_join(symptoms_subdf, by = c('betriebsid')) %>%
+  left_join(prep_lsg_qtr, by = c('tvdnummer')) %>% # << use quarterly version
+  left_join(prep_tbi, by = c('tvdnummer')) %>% # << use quarterly version
+  left_join(vac_npathogens, by = c('betriebsid')) %>%
+  select(-ends_with("_all"))
+```
+
+
+```{r}
+# Filter only Mäster
+mäster <- mbdat_mst %>%
+  filter(type2_info == "Mäster") %>%
+  select(-type2_info) 
+```
+
+
+```{r}
+# remove variables with 0 variance
+keep_mst <- names(mäster)[RemoveZeroVar(mäster)]
+
+# keep selected cols
+mäster <- mäster %>%
+  select(tidyselect::all_of(keep_mst))
+
+# check names order if it correct
+mäster <- mäster %>%
+  dplyr::relocate(starts_with("lsg_"), .after = last_col() ) %>%
+  dplyr::relocate(starts_with("smscore_"), .after = last_col() )
+
+names(mäster)
+```
+
+
+```{r}
+# na treatment
+FunReplaceNAzero <- function(x){ tidyr::replace_na(x, 0) }
+FunReplaceNAnegative <- function(x){ tidyr::replace_na(x, -1) }
+
+mäster_1 <- mäster %>% 
+  # drop rows that have more than 9 NA cols
+  filter(rowSums(is.na(.)) < 6) %>%
+  # drop variable pathogen_ttl & pathogen_count --- only have 2 value: 0 NA 1
+  select(-pathogen_ttl, -pathogen_count) %>%
+  # fil NA lat long with its col mean
+  mutate(lat = replace_na(lat, mean(lat, na.rm = TRUE)),
+         long = replace_na(long, mean(long, na.rm = TRUE))) %>%
+  # other numeric replace with zero
+  mutate(across(where(is.numeric), FunReplaceNAzero))
+
+```
+
+
+```{r, results='asis'}
+stargazer(mäster_1, type = "text")
+```
+
+# cluster 2: züchter
+
+```{r}
+# Züchter : merge data into 1 table
+mbdat_zht <- asp_adr %>%
+  select(betriebsid, tvdnummer, lat, long, lagedesbetriebes, abschmrngdsstswg, arbtsblfmngmtdsb) %>%
+  left_join(symptoms_subdf, by = c('betriebsid')) %>%
+  left_join(prep_lsg_wide, by = c('tvdnummer')) %>%  # << use wide version
+  left_join(prep_tbi_yearly, by = c('tvdnummer')) %>% # << use yearly version
+  left_join(vac_npathogens, by = c('betriebsid')) %>%
+  select(-ends_with("_all"))
+
+```
+
+
+```{r}
+# Filter only Züchter
+züchter <- mbdat_zht %>%
+  filter(type2_info == "Züchter") %>%
+  select(-type2_info)
+```
+
+
+```{r}
+# remove variables with 0 variance
+keep_zht <- names(züchter)[RemoveZeroVar(züchter)]
+
+# keep selected cols
+züchter <- züchter %>%
+  select(tidyselect::all_of(keep_zht))
+
+# check names order if it correct
+züchter <- züchter %>%
+  dplyr::relocate(starts_with("lsg_"), .after = last_col() ) %>%
+  dplyr::relocate(starts_with("smscore_"), .after = last_col() )
+
+names(züchter)
+```
+
+
+```{r}
+# na treatment : replace with -1
+FunReplaceNAnegative <- function(x){ tidyr::replace_na(x, -1) }
+
+züchter_1 <- züchter %>%
+  # fil NA lat long with its col mean
+  mutate(lat = replace_na(lat, mean(lat, na.rm = TRUE)),
+         long = replace_na(long, mean(long, na.rm = TRUE))) %>%
+  # keep rows that at least half of its col not NA
+  filter(rowSums(is.na(.)) < round(ncol(.)/2) ) %>%
+  # other numeric replace with zero
+  mutate(across(where(is.numeric), FunReplaceNAzero))
+
+```
+
+
+```{r, results='asis'}
+stargazer::stargazer(züchter_1, type = "text")
+```
+
+
+```{r}
+# Save headers as reference for short and long variable names
+
+# add file source
+asp_head_clean[["source"]] = "ASP"
+adr_head_clean[["source"]] = "Adresse"
+bhd_head_clean[["source"]] = "Behandlungen"
+gbr_head_clean[["source"]] = "Gesundheitsbericht"
+lsg_head_clean[["source"]] = "LSG"
+tbi_head_clean[["source"]] = "TBI"
+
+# combine files
+headers <- rbind(
+  asp_head_clean,
+  adr_head_clean,
+  bhd_head_clean,
+  gbr_head_clean,
+  lsg_head_clean,
+  tbi_head_clean
+)
+
+# new variables from data preparation
+selfcalc_var <- data.frame(
+  ori = union(names(mbdat_mst), names(mbdat_zht)), # to be edited in csv
+  new = union(names(mbdat_mst), names(mbdat_zht)),
+  source = "self calculated"
+)
+
+# add new variables to headers
+headers <- rbind(
+  headers,
+  selfcalc_var %>% dplyr::slice(15:n())
+)
+
+# save file
+readr::write_csv(headers, here::here("analysis/varname_reference.csv"))
+```
+
+
+```{r}
+# define dependent and independent
+dep <- c("lagedesbetriebes", "abschmrngdsstswg", "arbtsblfmngmtdsb")
+```
+
+
+```{r}
+# Y & X for Mäster
+indep_mst <- setdiff(names(mäster_1), c(dep, "betriebsid", "tvdnummer"))
+
+Y_mst <- mäster_1[, dep]
+X_mst <- mäster_1[, indep_mst]
+
+block_mst <- c(3,4,3,2)
+
+block_name <- c("1. Betriebseigenschaften", "2. Medizinischer Status", 
+                "3. Produktionsparameter", "4. Gesundheitsstatus")
+  
+names(X_mst)
+```
+
+
+```{r}
+# Y & X for Mäster
+indep_zht <- setdiff(names(züchter_1), c(dep, "betriebsid", "tvdnummer"))
+
+Y_zht <- züchter_1[, dep]
+X_zht <- züchter_1[, indep_zht]
+
+block_zht <- c(7,7,6,6)
+
+names(X_zht)
+```
+
+
+```{r}
+# Züchter
+pca_zht <- dudi.pca(Y_zht, center = TRUE, scale = FALSE, scannf = FALSE)
+ktabX_zht <- ade4::ktab.data.frame(df=data.frame(X_zht), blocks = block_zht, 
+                                   tabnames = block_name)
+
+mbpls_zht_fit <- mbpls(pca_zht, ktabX_zht, scale = TRUE, option = "none", scannf = FALSE, nf = 3)
+
+```
+
+
+```{r}
+# Mäster
+pca_mst <- dudi.pca(Y_mst, center = TRUE, scale = FALSE, scannf = FALSE)
+ktabX_mst <- ade4::ktab.data.frame(df=data.frame(X_mst), blocks = block_mst, 
+                                   tabnames = block_name)
+
+mbpls_mst_fit <- mbpls(pca_mst, ktabX_mst, scale = TRUE, option = "none", scannf = FALSE, nf = 3)
+```
+
+
+```{r}
+# save data
+save(züchter, mäster, 
+     pca_zht, ktabX_zht, mbpls_zht_fit,
+     pca_mst, ktabX_mst, mbpls_mst_fit,
+     file = here::here('analysis/mbpls_fit_filtered.Rdata'))
+```
+
